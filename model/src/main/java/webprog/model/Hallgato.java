@@ -18,7 +18,7 @@ public class Hallgato {
     private Collection<Orak> orak;
     private Allapot allapot;
     private Tipus tipus;
-
+    private Szak szak;
 
     @Override
     public String toString(){
@@ -37,7 +37,7 @@ public class Hallgato {
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9]+$");
         Matcher matcher = pattern.matcher(neptunKod);
         if (neptunKod.length() == 6 && matcher.matches()){
-            this.neptunKod = neptunKod;
+            this.neptunKod = neptunKod.toUpperCase();
         }
         else{
             throw new InvalidNeptunKod(String.valueOf(neptunKod));
@@ -48,11 +48,13 @@ public class Hallgato {
         return nev;
     }
     public void setNev(String nev) throws InvalidNev {
-        if (nev.matches("^[a-zA-Z]$")) {
+        Pattern pattern = Pattern.compile("^[a-zA-Z\\s]+$");
+        Matcher matcher = pattern.matcher(nev);
+        if (matcher.matches()){
             this.nev = nev;
         }
         else{
-            throw new InvalidNev(nev);
+            throw new InvalidNev(String.valueOf(nev));
         }
     }
 
@@ -73,12 +75,16 @@ public class Hallgato {
 
     public void setTipus(Tipus tipus) {this.tipus = tipus;}
 
-    public Hallgato(String neptunKod, String nev, LocalDate szulDatum, Collection<Orak> orak, Allapot allapot, Tipus tipus){
+    public Szak getSzak(){return szak;}
+    public void setSzak(Szak szak){this.szak = szak;}
+
+    public Hallgato(String neptunKod, String nev, LocalDate szulDatum, Collection<Orak> orak, Allapot allapot, Tipus tipus, Szak szak){
         this.neptunKod = neptunKod;
         this.nev = nev;
         this.szulDatum = szulDatum;
         this.orak = orak;
         this.allapot = allapot;
         this.tipus = tipus;
+        this.szak = szak;
     }
 }

@@ -1,28 +1,35 @@
-package Hallgato;
+package hallgato;
+
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import dao.DAO_JSON;
+import dao.DAOJSON;
 import dao.DuplikaltHallgato;
 import dao.HallgatoNincs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import webprog.exceptions.InvalidNeptunKod;
 import webprog.model.Allapot;
-import webprog.model.Orak;
-import webprog.model.Tipus;
 import webprog.model.Hallgato;
+import webprog.model.Orak;
+import webprog.model.Szak;
+import webprog.model.Tipus;
+
 import java.io.IOException;
 
-
+@Controller
 public class HallgatoController {
+
     @Autowired
-    DAO_JSON dao;
+    DAOJSON dao;
 
     @RequestMapping(value = "/")
     public ModelAndView index(){
         ModelAndView mav = new ModelAndView("index");
-        mav.addObject("message", "hello");
+        mav.addObject("message","Szia");
         return mav;
+
     }
 
     @RequestMapping(value = "/addHallgato", method = RequestMethod.GET)
@@ -31,11 +38,12 @@ public class HallgatoController {
         mav.addObject("orakTipusa", Orak.values());
         mav.addObject("allapotok", Allapot.values());
         mav.addObject("tipus", Tipus.values());
+        mav.addObject("szak", Szak.values());
         return mav;
     }
 
-    @RequestMapping(value = "/addKocsi", method = RequestMethod.POST)
-    public ModelAndView addHallgato(@ModelAttribute Hallgato hallgato) throws IOException{
+    @RequestMapping(value = "/addHallgato", method = RequestMethod.POST)
+    public ModelAndView addHallgato(@ModelAttribute Hallgato hallgato) throws IOException {
         try{
             dao.addHallgato(hallgato);
         }
@@ -43,8 +51,9 @@ public class HallgatoController {
             ModelAndView mav = new ModelAndView("hallgatoForm", "command", hallgato);
             mav.addObject("orakTipusa", Orak.values());
             mav.addObject("allapotok", Allapot.values());
-            mav.addObject("tipus", Tipus.values());
-            mav.addObject("message", "Foglalt a neptunkód"+ hallgato.getNeptunKod());
+            mav.addObject("tipusok", Tipus.values());
+            mav.addObject("szak", Szak.values());
+            mav.addObject("message", "Foglalt a neptunkód: "+ hallgato.getNeptunKod());
             return mav;
         }
 
@@ -52,16 +61,16 @@ public class HallgatoController {
         return mav;
     }
 
-    @RequestMapping(value = "hallgatok")
+    @RequestMapping(value = "/hallgatok")
     public ModelAndView listHallgatok() throws IOException{
         ModelAndView mav = new ModelAndView("hallgatok");
         mav.addObject("hallgatok", dao.readAllHallgato());
         return mav;
     }
 
-    @RequestMapping(value = "hallgato/{neptunkod}")
-    public ModelAndView getHallgatoByNeptunKod(@PathVariable String neptunKod) throws IOException, HallgatoNincs{
-        ModelAndView mav = new ModelAndView("hallgatoDetails");
+    @RequestMapping(value = "hallgato/{neptunKod}")
+    public @ResponseBody ModelAndView getHallgatoByNeptunKod(@PathVariable String neptunKod) throws IOException, HallgatoNincs {
+        ModelAndView mav = new ModelAndView("hallgatoDetails", "commad", neptunKod);
         mav.addObject("hallgato", dao.readByNeptunKod(neptunKod));
         return mav;
     }

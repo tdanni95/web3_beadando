@@ -1,0 +1,5 @@
+package webprog.model;
+
+public enum Szak {
+    PROGRAMTERVEZO_INFORMATIKUS, GAZDINFO, TANAR, BORASZ, PSZICHOLOGIA, GERMANISZTIKA
+}
