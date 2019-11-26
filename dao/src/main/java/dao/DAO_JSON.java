@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class DAOJSON {
+public class DAO_JSON {
     File file;
     ObjectMapper mapper;
 
-    public DAOJSON(String filepath) throws IOException {
+    public DAO_JSON(String filepath) throws IOException {
         this.file = new File(filepath);
         this.mapper= new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -51,7 +51,7 @@ public class DAOJSON {
         Collection<Hallgato> hallgatok = readAllHallgato();
         for(Hallgato h: hallgatok){
             if(h.getNeptunKod().equalsIgnoreCase(neptunKod)){
-                return k;
+                return h;
             }
         }
         throw new HallgatoNincs();

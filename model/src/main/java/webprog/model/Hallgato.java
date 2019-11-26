@@ -9,6 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Hallgato {
+    public Hallgato(){}
+
     private String neptunKod;
     private String nev;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -45,7 +47,7 @@ public class Hallgato {
     public String getNev(){
         return nev;
     }
-    public String setNev(String nev) throws InvalidNev {
+    public void setNev(String nev) throws InvalidNev {
         if (nev.matches("^[a-zA-Z]$")) {
             this.nev = nev;
         }
